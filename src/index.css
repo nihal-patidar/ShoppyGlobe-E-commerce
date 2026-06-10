@@ -1,1 +1,36 @@
 @import "tailwindcss";
+
+:root {
+  /* Brand Colors */
+  --primary: #6439FF;
+  --secondary: #4F75FF;
+  --accent: #00CCDD;
+  --highlight: #7CF5FF;
+
+  /* Light Mode */
+  --bg-main: #f8faff;
+  --bg-card: rgba(255,255,255,0.7);
+
+  --text-primary: #111827;
+  --text-secondary: #6b7280;
+
+  --border-color: rgba(100,57,255,0.12);
+
+  --shadow-color: rgba(100,57,255,0.15);
+}
+
+.dark {
+  /* Dark Mode */
+
+  --bg-main: #0b1020;
+
+  --bg-card: rgba(15,23,42,0.7);
+
+  --text-primary: #f8fafc;
+
+  --text-secondary: #94a3b8;
+
+  --border-color: rgba(124,245,255,0.12);
+
+  --shadow-color: rgba(0,204,221,0.2);
+}
