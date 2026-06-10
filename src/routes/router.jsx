@@ -6,6 +6,7 @@ import Cart from "../pages/Cart";
 import Checkout from "../pages/Checkout";
 import ProductDetail from "../pages/ProductDetail";
 import NotFound from "../pages/NotFound";
+import App from "../App";
 function Router() {
   const router = createBrowserRouter([
     {
@@ -33,6 +34,10 @@ function Router() {
           element: <NotFound />,
         },
       ],
+    },
+    {
+        path : '/test',
+        element : <App />
     }
   ]);
   return <RouterProvider router={router}></RouterProvider>;
