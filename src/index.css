@@ -34,3 +34,141 @@
 
   --shadow-color: rgba(0,204,221,0.2);
 }
+
+
+@utility glass {
+  backdrop-filter: blur(18px);
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+}
+
+@utility card-shadow {
+  box-shadow:
+    0 8px 32px var(--shadow-color);
+}
+
+@utility transition-smooth {
+  transition:
+    all 0.3s ease;
+}
+
+@utility gradient-primary {
+  background:
+    linear-gradient(
+      135deg,
+      var(--primary),
+      var(--secondary)
+    );
+}
+
+@utility gradient-accent {
+  background:
+    linear-gradient(
+      135deg,
+      var(--accent),
+      var(--highlight)
+    );
+}
+
+
+@utility page-container {
+  width: 100%;
+  max-width: 1440px;
+  margin-inline: auto;
+  padding-inline: 1rem;
+}
+
+@media (min-width: 768px) {
+  .page-container {
+    padding-inline: 2rem;
+  }
+}
+
+
+@utility btn-primary {
+  @apply
+  px-5
+  py-3
+  rounded-2xl
+  font-semibold
+  text-white
+  transition-all
+  duration-300;
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--primary),
+      var(--secondary)
+    );
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+}
+
+
+@utility btn-secondary {
+  @apply
+  px-5
+  py-3
+  rounded-2xl
+  font-semibold
+  transition-all
+  duration-300;
+
+  background:
+    rgba(255,255,255,0.08);
+
+  border:
+    1px solid var(--border-color);
+
+  color:
+    var(--text-primary);
+}
+
+@utility card {
+  @apply
+  glass
+  card-shadow
+  rounded-3xl
+  p-5
+  transition-all
+  duration-300;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+}
+
+
+@utility input-modern {
+  @apply
+  w-full
+  px-4
+  py-3
+  rounded-2xl;
+
+  background:
+    rgba(255,255,255,0.05);
+
+  border:
+    1px solid var(--border-color);
+
+  color:
+    var(--text-primary);
+}
+
+
+@utility page-container {
+  width: 100%;
+  max-width: 1440px;
+  margin-inline: auto;
+  padding-inline: 1rem;
+}
+
+@media (min-width: 768px) {
+  .page-container {
+    padding-inline: 2rem;
+  }
+}
