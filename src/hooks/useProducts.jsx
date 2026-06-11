@@ -21,6 +21,8 @@ function useProduct (){
 
             const data = await res.json();
 
+            console.log("product list" , data)
+
             setProduct(data.products);
             }catch(err){
                 setError(err);

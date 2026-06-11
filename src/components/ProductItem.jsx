@@ -1,4 +1,11 @@
-function ProductItem() {
+import React from "react";
+// Remove Suspense since we don't need it for standard image loading
+
+function ProductItem(props) {
+  // Extract the image URL safely. 
+  // Add a fallback placeholder image just in case the array is empty.
+  const imageUrl = props.product?.images?.[0] || "https://via.placeholder.com/150";
+
   return (
     <article
       className="
@@ -9,7 +16,7 @@ function ProductItem() {
         flex-col
       "
     >
-      {/* Image */}
+      {/* Image Container */}
       <div
         className="
           relative
@@ -18,9 +25,11 @@ function ProductItem() {
           bg-white/5
         "
       >
+        {/* Simply use standard standard img tag with loading="lazy" */}
         <img
-          src="https://placehold.co/600x400"
-          alt="Product"
+          src={imageUrl} 
+          alt={props.product?.title || "Product"}
+          loading="lazy" /* Native browser lazy loading */
           className="
             h-56
             w-full
@@ -45,7 +54,7 @@ function ProductItem() {
             glass
           "
         >
-          ⭐ 4.8
+          ⭐ {props.product?.rating || "4.8"}
         </span>
       </div>
 
@@ -59,7 +68,7 @@ function ProductItem() {
             line-clamp-2
           "
         >
-          Premium Product Name
+          {props.product?.title || "Premium Product Name"}
         </h3>
 
         <p
@@ -70,7 +79,7 @@ function ProductItem() {
             line-clamp-2
           "
         >
-          Short product description shown here.
+          {props.product?.description || "Short product description shown here."}
         </p>
 
         <div className="mt-4 flex items-center justify-between">
@@ -81,7 +90,7 @@ function ProductItem() {
               text-[var(--primary)]
             "
           >
-            ₹999
+            ₹{props.product?.price || "999"}
           </span>
 
           <button
