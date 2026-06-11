@@ -1,10 +1,12 @@
 import React from "react";
+import { Link } from "react-router-dom";
 // Remove Suspense since we don't need it for standard image loading
 
 function ProductItem(props) {
-  // Extract the image URL safely. 
+  // Extract the image URL safely.
   // Add a fallback placeholder image just in case the array is empty.
-  const imageUrl = props.product?.images?.[0] || "https://via.placeholder.com/150";
+  const imageUrl =
+    props.product?.images?.[0] || "https://via.placeholder.com/150";
 
   return (
     <article
@@ -27,7 +29,7 @@ function ProductItem(props) {
       >
         {/* Simply use standard standard img tag with loading="lazy" */}
         <img
-          src={imageUrl} 
+          src={imageUrl}
           alt={props.product?.title || "Product"}
           loading="lazy" /* Native browser lazy loading */
           className="
@@ -79,7 +81,8 @@ function ProductItem(props) {
             line-clamp-2
           "
         >
-          {props.product?.description || "Short product description shown here."}
+          {props.product?.description ||
+            "Short product description shown here."}
         </p>
 
         <div className="mt-4 flex items-center justify-between">
@@ -93,16 +96,18 @@ function ProductItem(props) {
             ₹{props.product?.price || "999"}
           </span>
 
-          <button
-            className="
-              btn-primary
-              text-sm
-              px-4
-              py-2
+          <Link to={`product/${props.product.id}`}>
+            <button
+              className="
+            btn-primary
+            text-sm
+            px-4
+            py-2
             "
-          >
-            View Details
-          </button>
+            >
+              View Details
+            </button>
+          </Link>
         </div>
       </div>
     </article>
