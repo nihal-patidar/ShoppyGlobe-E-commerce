@@ -9,6 +9,7 @@ function ProductItem(props) {
     props.product?.images?.[0] || "https://via.placeholder.com/150";
 
   return (
+     <Link to={`product/${props.product.id}`}>
     <article
       className="
         group
@@ -93,10 +94,9 @@ function ProductItem(props) {
               text-[var(--primary)]
             "
           >
-            ₹{props.product?.price || "999"}
+            ₹{(props.product?.price * 85).toFixed(0)}
           </span>
 
-          <Link to={`product/${props.product.id}`}>
             <button
               className="
             btn-primary
@@ -105,12 +105,12 @@ function ProductItem(props) {
             py-2
             "
             >
-              View Details
+              Add To Cart
             </button>
-          </Link>
         </div>
       </div>
     </article>
+    </Link>
   );
 }
 

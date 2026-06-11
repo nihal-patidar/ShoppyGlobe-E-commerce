@@ -1,10 +1,8 @@
+import Router from "./routes/router";
+
 function App() {
   return (
-    <div className="h-screen flex items-center justify-center">
-      <h1 className="text-5xl font-bold text-violet-600">
-        Tailwind Working 🚀
-      </h1>
-    </div>
+    <Router />
   );
 }
 
