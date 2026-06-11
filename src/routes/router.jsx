@@ -7,11 +7,13 @@ import Checkout from "../pages/Checkout";
 import ProductDetail from "../pages/ProductDetail";
 import NotFound from "../pages/NotFound";
 import App from "../App";
+import RouteError from "../pages/RouteError";
 function Router() {
   const router = createBrowserRouter([
     {
       path: "/",
       element: <Layout />,
+      errorElement : <RouteError />,
       children: [
         {
           path: "",

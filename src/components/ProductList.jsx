@@ -4,7 +4,7 @@ import useProduct from "../hooks/useProducts";
 import ProductItem from "./ProductItem";
 
 function ProductList() {
-  const { products, loading, error } = useProduct();
+  const { products, loading, error , setRetry} = useProduct();
 
   if (loading) {
     return <Loader text="Loading products..." />;
@@ -14,7 +14,7 @@ function ProductList() {
     return (
       <ErrorMessage
         message="Failed to load products."
-        onRetry={fetchProducts}
+        onRetry={()=>setRetry((prev)=>prev+1)}
       />
     );
   }

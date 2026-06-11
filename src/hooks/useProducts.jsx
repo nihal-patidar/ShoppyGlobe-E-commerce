@@ -6,6 +6,7 @@ function useProduct (){
     const [products , setProduct] = useState([]);
     const [loading , setLoading] = useState(true);
     const [error , setError] = useState(null);
+    const [ retry , setRetry] = useState(0)
 
     useEffect(()=>{
 
@@ -33,9 +34,9 @@ function useProduct (){
         fetchProduct();
 
 
-    },[])
+    },[retry])
 
-    return { products , loading , error } ;
+    return { products , loading , error , setRetry} ;
 }
 
 export default useProduct ;
