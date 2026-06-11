@@ -55,7 +55,7 @@ function Home() {
           </h2>
         </div>
 
-        {/* <ProductList /> */}
+        <ProductList />
       </section>
     </div>
   );

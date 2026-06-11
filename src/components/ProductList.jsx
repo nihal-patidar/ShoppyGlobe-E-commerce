@@ -1,14 +1,41 @@
+import Loader from "./Loader";
+import ErrorMessage from "./ErrorMessage";
 import useProduct from "../hooks/useProducts";
+import ProductItem from "./ProductItem";
 
-function ProductList(){
+function ProductList() {
+  const { products, loading, error } = useProduct();
 
-    const {products , loading , error} = useProduct();
+  if (loading) {
+    return <Loader text="Loading products..." />;
+  }
 
-    console.log(products)
-
+  if (error) {
     return (
-        <h1> Product List </h1>
-    )
+      <ErrorMessage
+        message="Failed to load products."
+        onRetry={fetchProducts}
+      />
+    );
+  }
+
+  return (
+    <section>
+      <div
+        className="
+          grid
+          gap-6
+          sm:grid-cols-2
+          lg:grid-cols-3
+          xl:grid-cols-4
+        "
+      >
+        {products.map((product) => (
+          <ProductItem key={product.id} product={product} />
+        ))}
+      </div>
+    </section>
+  );
 }
 
-export default ProductList ;
+export default ProductList;
