@@ -1,4 +1,10 @@
-function CartItem() {
+import { useDispatch } from "react-redux";
+import { increaseQuantity , decreaseQuantity , removeFromCart} from "../redux/cartSlice";
+
+function CartItem({product}) {
+
+    const dispatch = useDispatch();
+
   return (
     <div
       className="
@@ -13,7 +19,7 @@ function CartItem() {
     >
       {/* Image */}
       <img
-        src="https://placehold.co/200"
+        src={product.thumbnail}
         alt="Product"
         loading="lazy"
         className="
@@ -34,7 +40,7 @@ function CartItem() {
             text-[var(--text-primary)]
           "
         >
-          Premium Wireless Headphones
+          {product.title}
         </h3>
 
         <p
@@ -44,7 +50,7 @@ function CartItem() {
             text-[var(--text-secondary)]
           "
         >
-          Electronics
+            {product.category}
         </p>
 
         <p
@@ -55,7 +61,7 @@ function CartItem() {
             text-[var(--primary)]
           "
         >
-          ₹999
+          {product.price}
         </p>
       </div>
 
@@ -90,6 +96,8 @@ function CartItem() {
               hover:scale-105
               active:scale-95
             "
+
+            onClick={()=>{ dispatch(decreaseQuantity(product.id))}}
           >
             −
           </button>
@@ -101,7 +109,7 @@ function CartItem() {
               font-semibold
             "
           >
-            1
+           {product?.quantity}
           </span>
 
           <button
@@ -116,6 +124,7 @@ function CartItem() {
               hover:scale-105
               active:scale-95
             "
+            onClick={()=>{dispatch(increaseQuantity(product.id))}}
           >
             +
           </button>
@@ -129,6 +138,7 @@ function CartItem() {
             text-red-400
             hover:underline
           "
+          onClick={()=>dispatch(removeFromCart(product.id))}
         >
           Remove Item
         </button>

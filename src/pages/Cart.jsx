@@ -1,6 +1,27 @@
+import { useDispatch, useSelector } from "react-redux";
 import CartItem from "../components/CartItem";
+// import { increaseQuantity , decreaseQuantity , removeFromCart } from "../redux/cartSlice";
 
 function Cart() {
+
+    const cartList  = useSelector((store)=>store.cart.items);
+
+    // const dispatch = useDispatch();
+
+    // function increaseItemQty(id){
+    //     dispatch(increaseQuantity(id))
+    // }
+
+
+    // function decreaseItemQty(id){
+    //     dispatch(decreaseQuantity(id));
+    // }
+
+    // function removeItemFromCart(id){
+    //     dispatch(removeFromCart(id));
+    // }
+    
+
   return (
     <section className="space-y-8">
       {/* Page Title */}
@@ -48,12 +69,9 @@ function Cart() {
     scrollbar-hide
   "
         >
-          <CartItem />
-          <CartItem />
-          <CartItem />
-          <CartItem />
-          <CartItem />
-          <CartItem />
+          {
+            cartList?.map((item)=> <CartItem key={item.id} product={item} />)
+          }
         </div>
 
         {/* Summary */}
