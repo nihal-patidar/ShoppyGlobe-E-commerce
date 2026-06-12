@@ -1,11 +1,14 @@
 import { useDispatch } from "react-redux";
-import { increaseQuantity , decreaseQuantity , removeFromCart} from "../redux/cartSlice";
+import {
+  increaseQuantity,
+  decreaseQuantity,
+  removeFromCart,
+} from "../redux/cartSlice";
 import { toast } from "react-toastify";
 import { notify } from "../utils/toaster";
 
-function CartItem({product}) {
-
-    const dispatch = useDispatch();
+function CartItem({ product }) {
+  const dispatch = useDispatch();
 
   return (
     <div
@@ -52,7 +55,7 @@ function CartItem({product}) {
             text-[var(--text-secondary)]
           "
         >
-            {product.category}
+          {product.category}
         </p>
 
         <p
@@ -98,8 +101,10 @@ function CartItem({product}) {
               hover:scale-105
               active:scale-95
             "
-
-            onClick={()=>{ dispatch(decreaseQuantity(product.id)) ; notify.decreased()}}
+            onClick={() => {
+              dispatch(decreaseQuantity(product.id));
+              notify.decreased();
+            }}
           >
             −
           </button>
@@ -111,7 +116,7 @@ function CartItem({product}) {
               font-semibold
             "
           >
-           {product?.quantity}
+            {product?.quantity}
           </span>
 
           <button
@@ -126,21 +131,35 @@ function CartItem({product}) {
               hover:scale-105
               active:scale-95
             "
-            onClick={()=>{dispatch(increaseQuantity(product.id)) ; notify.added()}}
+            onClick={() => {
+              dispatch(increaseQuantity(product.id));
+              notify.added();
+            }}
           >
             +
           </button>
         </div>
 
-        {/* Remove */}
         <button
+          onClick={() => {
+            dispatch(removeFromCart(product.id));
+            notify.removed();
+          }}
           className="
-            text-sm
-            font-medium
-            text-red-400
-            hover:underline
-          "
-          onClick={()=>{dispatch(removeFromCart(product.id)); notify.removed();}}
+    rounded-xl
+    px-4
+    py-2
+    text-sm
+    font-medium
+    bg-white/5
+    border
+    border-[var(--border-color)]
+    text-[var(--text-secondary)]
+    hover:text-red-400
+    hover:border-red-500/40
+    transition-all
+    duration-300
+  "
         >
           Remove Item
         </button>

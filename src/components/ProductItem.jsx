@@ -107,7 +107,7 @@ function ProductItem(props) {
               text-[var(--primary)]
             "
         >
-          ₹{(props.product?.price * 85).toFixed(0)}
+          ₹{props.product.price}
         </span>
 
         <button

@@ -4,21 +4,22 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { clearCart } from "../redux/cartSlice";
 import NoProductsFound from "../components/NoProductFound";
+import OrderProcessing from "../components/OrderProcessing";
 
 function Checkout() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [processing , setProcessing] = useState(false);
+  const [processing, setProcessing] = useState(false);
 
-  const cartItems = useSelector(
-    (store) => store.cart.items
-  );
+  const cartItems = useSelector((store) => store.cart.items);
 
-  if(cartItems.length === 0){
-    setTimeout(()=>{
-        navigate("/")
-    },3000)
-    return <NoProductsFound message="There is no item in Cart. Please items to Cart"/>
+  if (cartItems.length === 0) {
+    setTimeout(() => {
+      navigate("/");
+    }, 3000);
+    return (
+      <NoProductsFound message="There is no item in Cart. Please items to Cart" />
+    );
   }
   const [formData, setFormData] = useState({
     name: "",
@@ -28,9 +29,8 @@ function Checkout() {
   });
 
   const subtotal = cartItems.reduce(
-    (sum, item) =>
-      sum + item.price * item.quantity,
-    0
+    (sum, item) => sum + item.price * item.quantity,
+    0,
   );
 
   const shipping = subtotal > 1000 ? 0 : 99;
@@ -45,34 +45,29 @@ function Checkout() {
   }
 
   function handleSubmit(e) {
-    e.preventDefault();
+      e.preventDefault();
 
-    toast.success("🎉 Order placed successfully!");
+      setProcessing(true);
 
-    
-    function handleSubmit(e) {
-  e.preventDefault();
+      setTimeout(() => {
+        dispatch(clearCart());
 
-  setProcessing(true);
+        toast.success("Order placed successfully!");
 
-  setTimeout(() => {
-    dispatch(clearCart());
-
-    toast.success(
-      "Order placed successfully!"
-    );
-
-    navigate("/");
-  }, 5000);
-}
-  }
-
+        navigate("/");
+      }, 7000);
+    }
   return (
-    <section className="space-y-8">
-      {/* Heading */}
-      <div>
-        <h1
-          className="
+    <>
+      {processing ? (
+        <OrderProcessing />
+      ) : (
+        <section className="space-y-8">
+          {/* Heading */}
+
+          <div>
+            <h1
+              className="
             text-4xl
             md:text-5xl
             font-bold
@@ -83,181 +78,173 @@ function Checkout() {
             bg-clip-text
             text-transparent
           "
-        >
-          Checkout
-        </h1>
+            >
+              Checkout
+            </h1>
 
-        <p
-          className="
+            <p
+              className="
             mt-2
             text-[var(--text-secondary)]
           "
-        >
-          Complete your order details.
-        </p>
-      </div>
+            >
+              Complete your order details.
+            </p>
+          </div>
 
-      <div
-        className="
+          <div
+            className="
           grid
           gap-8
           lg:grid-cols-[2fr_1fr]
         "
-      >
-        {/* Form */}
-        <form
-          onSubmit={handleSubmit}
-          className="
+          >
+            {/* Form */}
+            <form
+              onSubmit={handleSubmit}
+              className="
             card
             space-y-5
           "
-        >
-          <h2
-            className="
+            >
+              <h2
+                className="
               text-2xl
               font-bold
             "
-          >
-            Customer Information
-          </h2>
+              >
+                Customer Information
+              </h2>
 
-          <input
-            type="text"
-            name="name"
-            placeholder="Full Name"
-            value={formData.name}
-            onChange={handleChange}
-            required
-            className="input-modern"
-          />
+              <input
+                type="text"
+                name="name"
+                placeholder="Full Name"
+                value={formData.name}
+                onChange={handleChange}
+                required
+                className="input-modern"
+              />
 
-          <input
-            type="email"
-            name="email"
-            placeholder="Email Address"
-            value={formData.email}
-            onChange={handleChange}
-            required
-            className="input-modern"
-          />
+              <input
+                type="email"
+                name="email"
+                placeholder="Email Address"
+                value={formData.email}
+                onChange={handleChange}
+                required
+                className="input-modern"
+              />
 
-          <input
-            type="tel"
-            name="phone"
-            placeholder="Phone Number"
-            value={formData.phone}
-            onChange={handleChange}
-            required
-            className="input-modern"
-          />
+              <input
+                type="tel"
+                name="phone"
+                placeholder="Phone Number"
+                value={formData.phone}
+                onChange={handleChange}
+                required
+                className="input-modern"
+              />
 
-          <textarea
-            name="address"
-            rows="4"
-            placeholder="Shipping Address"
-            value={formData.address}
-            onChange={handleChange}
-            required
-            className="
+              <textarea
+                name="address"
+                rows="4"
+                placeholder="Shipping Address"
+                value={formData.address}
+                onChange={handleChange}
+                required
+                className="
               input-modern
               resize-none
             "
-          />
+              />
 
-          <button
-            type="submit"
-            className="
+              <button
+                type="submit"
+                className="
               btn-primary
               w-full
             "
-          >
-            Place Order
-          </button>
-        </form>
+              >
+                Place Order
+              </button>
+            </form>
 
-        {/* Summary */}
-        <aside
-          className="
+            {/* Summary */}
+            <aside
+              className="
             card
             h-fit
             sticky
             top-24
           "
-        >
-          <h2
-            className="
+            >
+              <h2
+                className="
               text-2xl
               font-bold
               mb-6
             "
-          >
-            Order Summary
-          </h2>
+              >
+                Order Summary
+              </h2>
 
-          <div className="space-y-4">
-            {cartItems.map((item) => (
-              <div
-                key={item.id}
-                className="
+              <div className="space-y-4">
+                {cartItems.map((item) => (
+                  <div
+                    key={item.id}
+                    className="
                   flex
                   justify-between
                   text-sm
                 "
-              >
-                <span>
-                  {item.title} × {item.quantity}
-                </span>
+                  >
+                    <span>
+                      {item.title} × {item.quantity}
+                    </span>
 
-                <span>
-                  ₹
-                  {(
-                    item.price *
-                    item.quantity
-                  ).toFixed(0)}
-                </span>
-              </div>
-            ))}
+                    <span>₹{(item.price * item.quantity).toFixed(0)}</span>
+                  </div>
+                ))}
 
-            <hr className="border-[var(--border-color)]" />
+                <hr className="border-[var(--border-color)]" />
 
-            <div className="flex justify-between">
-              <span>Subtotal</span>
-              <span>
-                ₹{subtotal.toFixed(0)}
-              </span>
-            </div>
+                <div className="flex justify-between">
+                  <span>Subtotal</span>
+                  <span>₹{subtotal.toFixed(0)}</span>
+                </div>
 
-            <div className="flex justify-between">
-              <span>Shipping</span>
-              <span>
-                ₹{shipping.toFixed(0)}
-              </span>
-            </div>
+                <div className="flex justify-between">
+                  <span>Shipping</span>
+                  <span>₹{shipping.toFixed(0)}</span>
+                </div>
 
-            <hr className="border-[var(--border-color)]" />
+                <hr className="border-[var(--border-color)]" />
 
-            <div
-              className="
+                <div
+                  className="
                 flex
                 justify-between
                 text-xl
                 font-bold
               "
-            >
-              <span>Total</span>
+                >
+                  <span>Total</span>
 
-              <span
-                className="
+                  <span
+                    className="
                   text-[var(--primary)]
                 "
-              >
-                ₹{total.toFixed(0)}
-              </span>
-            </div>
+                  >
+                    ₹{total.toFixed(0)}
+                  </span>
+                </div>
+              </div>
+            </aside>
           </div>
-        </aside>
-      </div>
-    </section>
+        </section>
+      )}
+    </>
   );
 }
 

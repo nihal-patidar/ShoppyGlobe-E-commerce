@@ -35,6 +35,7 @@ function ProductList() {
   }
 
   if (error) {
+    console.log(error)
     return (
       <ErrorMessage
         message="Failed to load products."

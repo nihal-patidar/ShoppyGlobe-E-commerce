@@ -2,21 +2,20 @@ import ProductList from "../components/ProductList";
 
 function Home() {
   return (
-    <div className="space-y-10">
-      {/* Hero */}
+    <div className="space-y-6">
+      {/* Section Header */}
       <section
         className="
-          card
-          text-center
-          py-12
+          flex
+          flex-col
+          gap-2
         "
       >
         <h1
           className="
-            text-4xl
-            md:text-6xl
-            font-black
-            tracking-tight
+            text-2xl
+            md:text-4xl
+            font-bold
             bg-gradient-to-r
             from-[var(--primary)]
             via-[var(--secondary)]
@@ -25,38 +24,22 @@ function Home() {
             text-transparent
           "
         >
-          Discover Amazing Products
+          Featured Products
         </h1>
 
         <p
           className="
-            mt-4
-            max-w-2xl
-            mx-auto
+            text-sm
+            md:text-base
             text-[var(--text-secondary)]
           "
         >
-          Shop smarter with modern products,
-          premium quality, and unbeatable deals.
+          Explore our latest collection and discover products you'll love.
         </p>
       </section>
 
-      {/* Product Section */}
-      <section>
-        <div className="mb-6">
-          <h2
-            className="
-              text-2xl
-              font-bold
-              text-[var(--text-primary)]
-            "
-          >
-            Featured Products
-          </h2>
-        </div>
-
-        <ProductList />
-      </section>
+      {/* Products */}
+      <ProductList />
     </div>
   );
 }

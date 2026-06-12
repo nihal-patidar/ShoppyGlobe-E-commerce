@@ -1,146 +1,277 @@
+import { useEffect, useState } from "react";
+
 function OrderProcessing() {
+  const [currentStep, setCurrentStep] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentStep((prev) => {
+        if (prev >= 4) {
+          clearInterval(interval);
+          return prev;
+        }
+
+        return prev + 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+  const steps = [
+    {
+      title: "Order Confirmed",
+      icon: "✅",
+      description: "We've received your order.",
+    },
+    {
+      title: "Packaging Products",
+      icon: "📦",
+      description: "Carefully preparing your items.",
+    },
+    {
+      title: "Assigning Delivery Partner",
+      icon: "🛵",
+      description: "Finding the fastest delivery route.",
+    },
+    {
+      title: "Out For Dispatch",
+      icon: "🚚",
+      description: "Your package is leaving our warehouse.",
+    },
+    {
+      title: "Order Dispatched",
+      icon: "🎉",
+      description: "Your package is on the way!",
+    },
+  ];
+
+  const progress = ((currentStep + 1) / steps.length) * 100;
+
   return (
     <div
       className="
         fixed
         inset-0
-        z-[100]
+        z-[999]
         flex
         items-center
         justify-center
-        bg-black/60
-        backdrop-blur-md
+        bg-black/70
+        backdrop-blur-xl
+        p-4
       "
     >
       <div
         className="
           card
           w-full
-          max-w-md
-          text-center
-          p-8
+          max-w-5xl
+          min-h-[75vh]
+          flex
+          flex-col
+          justify-center
+          items-center
+          px-6
+          md:px-12
+          py-10
         "
       >
-        {/* Animated Circle */}
-        <div
-          className="
-            mx-auto
-            mb-6
-            relative
-            h-24
-            w-24
-          "
-        >
+        {/* Main Animation */}
+        <div className="relative w-full max-w-3xl mb-12">
           <div
             className="
-              absolute
-              inset-0
-              rounded-full
-              border-4
-              border-[var(--primary)]
-              animate-ping
-              opacity-30
-            "
-          />
-
-          <div
-            className="
-              absolute
-              inset-2
-              rounded-full
-              bg-gradient-to-r
-              from-[var(--primary)]
-              to-[var(--secondary)]
               flex
+              justify-between
               items-center
-              justify-center
-              text-4xl
+              text-5xl
+              md:text-7xl
             "
           >
-            📦
+            <span>📦</span>
+
+            <div
+              className="
+                flex-1
+                h-1
+                mx-4
+                rounded-full
+                bg-white/10
+                relative
+                overflow-hidden
+              "
+            >
+              <div
+                className="
+                  absolute
+                  inset-y-0
+                  left-0
+                  rounded-full
+                  bg-gradient-to-r
+                  from-[var(--primary)]
+                  via-[var(--secondary)]
+                  to-[var(--accent)]
+                  transition-all
+                  duration-700
+                "
+                style={{
+                  width: `${progress}%`,
+                }}
+              />
+            </div>
+
+            <span>🏠</span>
+          </div>
+
+          {/* Moving Truck */}
+          <div
+            className="
+              absolute
+              top-1/2
+              -translate-y-1/2
+              text-4xl
+              md:text-6xl
+              transition-all
+              duration-700
+            "
+            style={{
+              left: `calc(${progress}% - 25px)`,
+            }}
+          >
+            🚚
           </div>
         </div>
 
-        <h2
+        {/* Active Step */}
+        <div
+          key={currentStep}
           className="
-            text-2xl
-            font-bold
-            text-[var(--text-primary)]
+            text-center
+            animate-[fadeIn_0.5s_ease]
           "
         >
-          Order Dispatched
-        </h2>
+          <div
+            className="
+              text-7xl
+              md:text-9xl
+              mb-6
+              animate-bounce
+            "
+          >
+            {steps[currentStep].icon}
+          </div>
 
-        <p
-          className="
-            mt-3
-            text-[var(--text-secondary)]
-          "
-        >
-          Your package is being prepared for shipment.
-        </p>
+          <h2
+            className="
+              text-3xl
+              md:text-5xl
+              font-bold
+              text-[var(--text-primary)]
+            "
+          >
+            {steps[currentStep].title}
+          </h2>
 
-        {/* Animated Status */}
+          <p
+            className="
+              mt-4
+              text-lg
+              md:text-xl
+              text-[var(--text-secondary)]
+            "
+          >
+            {steps[currentStep].description}
+          </p>
+        </div>
+
+        {/* Timeline */}
         <div
           className="
-            mt-8
-            space-y-3
-            text-left
+            mt-12
+            grid
+            grid-cols-2
+            md:grid-cols-5
+            gap-4
+            w-full
           "
         >
-          <div className="animate-pulse">
-            ✅ Order Confirmed
-          </div>
+          {steps.map((step, index) => (
+            <div
+              key={step.title}
+              className={`
+                rounded-2xl
+                p-4
+                text-center
+                transition-all
+                duration-500
 
-          <div
-            className="
-              animate-pulse
-              [animation-delay:500ms]
-            "
-          >
-            📦 Packaging Product
-          </div>
+                ${
+                  index < currentStep
+                    ? `
+                    bg-[var(--primary)]/20
+                    border
+                    border-[var(--primary)]
+                  `
+                    : index === currentStep
+                      ? `
+                    scale-105
+                    border
+                    border-[var(--accent)]
+                    shadow-lg
+                  `
+                      : `
+                    border
+                    border-[var(--border-color)]
+                  `
+                }
+              `}
+            >
+              <div className="text-2xl mb-2">{step.icon}</div>
 
-          <div
-            className="
-              animate-pulse
-              [animation-delay:1000ms]
-            "
-          >
-            🚚 Assigning Delivery Partner
-          </div>
-
-          <div
-            className="
-              animate-pulse
-              [animation-delay:1500ms]
-            "
-          >
-            🎉 Ready To Ship
-          </div>
+              <div
+                className="
+                  text-xs
+                  md:text-sm
+                  font-medium
+                "
+              >
+                {step.title}
+              </div>
+            </div>
+          ))}
         </div>
 
         {/* Progress */}
         <div
           className="
             mt-8
-            h-2
-            overflow-hidden
-            rounded-full
-            bg-white/10
+            w-full
+            max-w-xl
           "
         >
           <div
             className="
-              h-full
-              w-full
-              animate-[loading_5s_linear]
-              bg-gradient-to-r
-              from-[var(--primary)]
-              via-[var(--secondary)]
-              to-[var(--accent)]
+              h-3
+              overflow-hidden
+              rounded-full
+              bg-white/10
             "
-          />
+          >
+            <div
+              className="
+                h-full
+                rounded-full
+                bg-gradient-to-r
+                from-[var(--primary)]
+                via-[var(--secondary)]
+                to-[var(--accent)]
+                transition-all
+                duration-700
+              "
+              style={{
+                width: `${progress}%`,
+              }}
+            />
+          </div>
         </div>
       </div>
     </div>

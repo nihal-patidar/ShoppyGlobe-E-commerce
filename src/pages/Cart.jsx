@@ -1,18 +1,36 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+
 import CartItem from "../components/CartItem";
-// import { increaseQuantity , decreaseQuantity , removeFromCart } from "../redux/cartSlice";
+import EmptyCart from "../components/EmptyCart";
 
 function Cart() {
+  const cartList = useSelector(
+    (store) => store.cart.items
+  );
 
-    const cartList  = useSelector((store)=>store.cart.items);
+  const subtotal = cartList.reduce(
+    (sum, item) =>
+      sum + item.price * item.quantity,
+    0
+  );
+
+  const shipping =
+    cartList.length > 0 ? 99 : 0;
+
+  const total = subtotal + shipping;
+
+  if (!cartList.length) {
+    return <EmptyCart />;
+  }
 
   return (
     <section className="space-y-8">
-      {/* Page Title */}
+      {/* Header */}
       <div>
         <h1
           className="
-            text-4xl
+            text-3xl
             md:text-5xl
             font-bold
             bg-gradient-to-r
@@ -36,7 +54,7 @@ function Cart() {
         </p>
       </div>
 
-      {/* Cart Layout */}
+      {/* Layout */}
       <div
         className="
           grid
@@ -44,18 +62,23 @@ function Cart() {
           lg:grid-cols-[2fr_1fr]
         "
       >
-        {/* Items */}
-        <div className="
-    space-y-5
-    max-h-[70vh]
-    overflow-y-auto
-    scroll-smooth
-    scrollbar-hide
-  "
+        {/* Cart Items */}
+        <div
+          className="
+            space-y-5
+            max-h-[70vh]
+            overflow-y-auto
+            scroll-smooth
+            scrollbar-hide
+            pr-1
+          "
         >
-          {
-            cartList?.map((item)=> <CartItem key={item.id} product={item} />)
-          }
+          {cartList.map((item) => (
+            <CartItem
+              key={item.id}
+              product={item}
+            />
+          ))}
         </div>
 
         {/* Summary */}
@@ -77,46 +100,104 @@ function Cart() {
             Order Summary
           </h2>
 
-          <div className="space-y-4">
+          {/* Items */}
+          <div className="space-y-3">
+            {cartList.map((item) => (
+              <div
+                key={item.id}
+                className="
+                  flex
+                  justify-between
+                  text-sm
+                "
+              >
+                <span
+                  className="
+                    truncate
+                    max-w-[180px]
+                  "
+                >
+                  {item.title} ×{" "}
+                  {item.quantity}
+                </span>
+
+                <span>
+                  ₹
+                  {(
+                    item.price *
+                    item.quantity
+                  ).toFixed(0)}
+                </span>
+              </div>
+            ))}
+          </div>
+
+          <hr
+            className="
+              my-5
+              border-[var(--border-color)]
+            "
+          />
+
+          {/* Price Details */}
+          <div className="space-y-3">
             <div className="flex justify-between">
               <span>Subtotal</span>
-              <span>₹2997</span>
+
+              <span>
+                ₹{subtotal.toFixed(0)}
+              </span>
             </div>
 
             <div className="flex justify-between">
               <span>Shipping</span>
-              <span>Free</span>
+
+              <span>
+                ₹{shipping.toFixed(0)}
+              </span>
             </div>
-
-            <div className="flex justify-between">
-              <span>Tax</span>
-              <span>₹150</span>
-            </div>
-
-            <hr className="border-[var(--border-color)]" />
-
-            <div
-              className="
-                flex
-                justify-between
-                text-xl
-                font-bold
-              "
-            >
-              <span>Total</span>
-              <span className="text-[var(--primary)]">₹3147</span>
-            </div>
-
-            <button
-              className="
-                btn-primary
-                w-full
-                mt-4
-              "
-            >
-              Proceed to Checkout
-            </button>
           </div>
+
+          <hr
+            className="
+              my-5
+              border-[var(--border-color)]
+            "
+          />
+
+          {/* Total */}
+          <div
+            className="
+              flex
+              justify-between
+              text-xl
+              font-bold
+            "
+          >
+            <span>Total</span>
+
+            <span
+              className="
+                text-[var(--primary)]
+              "
+            >
+              ₹{total.toFixed(0)}
+            </span>
+          </div>
+
+          {/* Checkout */}
+          <Link
+            to="/checkout"
+            className="
+              btn-primary
+              w-full
+              mt-6
+              flex
+              justify-center
+            "
+          >
+            Proceed to Checkout
+          </Link>
         </aside>
       </div>
     </section>

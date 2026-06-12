@@ -34,7 +34,7 @@ function ProductDetail() {
 
         const data = await res.json();
 
-        setProduct(data);
+        setProduct({...data, price : (data.price * 85).toFixed(0)});
         setCurrentImage(data.thumbnail)
         
       } catch (err) {
@@ -260,7 +260,7 @@ function ProductDetail() {
                   text-[var(--primary)]
                 "
               >
-                ₹{(product.price * 85).toFixed(0)}
+                ₹{product.price}
               </span>
 
               <span
