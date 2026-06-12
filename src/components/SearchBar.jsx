@@ -1,5 +1,21 @@
-function SearchBar(){
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { setSearchItem } from "../redux/searchSlice";
 
+function SearchBar(){
+    const [query , setQuery] = useState("");
+    const dispatch = useDispatch();
+
+
+    function handleSearch(e){
+
+      if(e.key != 'Enter') return ;
+      dispatch(setSearchItem(query))
+    }
+
+    function handleChange(e){
+      setQuery(e.target.value);
+    }
     return (
                 //   {/* Search */}
           <div
@@ -14,7 +30,7 @@ function SearchBar(){
             <div className="relative">
               <input
                 type="text"
-                placeholder="Search products..."
+                placeholder="Search products... & Press Enter"
                 className="
                   w-full
                   h-12
@@ -32,6 +48,12 @@ function SearchBar(){
                   focus:ring-[var(--accent)]/20
                   transition-all
                 "
+
+                value={query}
+
+                onChange={handleChange}
+
+                onKeyDown={handleSearch}
               />
 
               <span

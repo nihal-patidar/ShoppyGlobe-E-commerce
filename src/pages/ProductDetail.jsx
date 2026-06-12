@@ -1,12 +1,17 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-
+import { addToCart } from "../redux/cartSlice";
 import Loader from "../components/Loader";
 import ErrorMessage from "../components/ErrorMessage";
+import { useDispatch } from "react-redux";
+import { notify } from "../utils/toaster";
+
 
 function ProductDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
+
+  const dispatch = useDispatch();
 
   const [product, setProduct] = useState(null);
   const [error, setError] = useState(null);
@@ -58,6 +63,13 @@ function ProductDetail() {
       />
     );
   }
+
+
+  function handleAddToCart() {
+      if(!product) return ;
+      dispatch(addToCart({...product, quantity : 1}));
+      notify.added();
+    }
 
   return (
     <section className="space-y-8">
@@ -301,6 +313,8 @@ function ProductDetail() {
                   btn-primary
                   flex-1
                 "
+
+                onClick={handleAddToCart}
               >
                 Add To Cart
               </button>
