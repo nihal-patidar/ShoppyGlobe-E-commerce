@@ -54,15 +54,15 @@ function ProductList() {
           xl:grid-cols-4
         "
       >
-        {productList.length === 0 && (
-          <>
-            <NoProductsFound />
-            <Loader />
-          </>
-        )}
-        {productList.map((product) => (
+
+        {
+          productList.length > 0 ? productList.map((product) => (
           <ProductItem key={product.id} product={product} />
-        ))}
+        )) : <>
+            <NoProductsFound />
+            {/* <Loader /> */}
+          </>
+        }
       </div>
     </section>
   );
