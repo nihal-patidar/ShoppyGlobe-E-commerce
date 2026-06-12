@@ -3,8 +3,11 @@ import { NavLink, Link } from "react-router-dom";
 import SearchBar from "./SearchBar";
 
 function Header() {
+  // Retrieve cart items from Redux store
+  // Used to display the total number of products in cart
   const items = useSelector((state) => state.cart.items);
 
+  // Dynamic styling for active and inactive navigation links
   const navLinkStyles = ({ isActive }) =>
     `
     relative
@@ -50,7 +53,7 @@ function Header() {
           py-4
         "
       >
-        {/* Top Row */}
+        {/* Header content wrapper */}
         <div
           className="
             flex
@@ -60,7 +63,7 @@ function Header() {
             flex-wrap
           "
         >
-          {/* Logo */}
+          {/* Brand logo and application title */}
           <Link
             to="/"
             className="
@@ -70,6 +73,7 @@ function Header() {
               shrink-0
             "
           >
+            {/* Brand icon */}
             <div
               className="
                 h-11
@@ -89,6 +93,7 @@ function Header() {
               S
             </div>
 
+            {/* Brand name */}
             <h1
               className="
                 text-xl
@@ -107,9 +112,10 @@ function Header() {
             </h1>
           </Link>
 
-        <SearchBar />
+          {/* Product search component */}
+          <SearchBar />
 
-          {/* Navigation */}
+          {/* Main navigation menu */}
           <nav
             className="
               order-2
@@ -131,6 +137,7 @@ function Header() {
               <span className="flex items-center gap-2">
                 Cart
 
+                {/* Cart item count badge */}
                 <span
                   className="
                     min-w-6

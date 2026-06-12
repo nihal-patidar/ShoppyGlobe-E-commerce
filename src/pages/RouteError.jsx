@@ -1,9 +1,19 @@
 import { useRouteError, Link } from "react-router-dom";
 
 function RouteError() {
+  // Retrieve route error information
   const error = useRouteError();
 
-  console.error(error);
+  // Log errors only during development
+  if (import.meta.env.DEV) {
+    console.error(error);
+  }
+
+  // Extract the most useful error information available
+  const errorMessage =
+    error?.message ||
+    error?.statusText ||
+    "An unexpected error occurred.";
 
   return (
     <section
@@ -24,6 +34,7 @@ function RouteError() {
           p-8
         "
       >
+        {/* Error icon */}
         <div
           className="
             mx-auto
@@ -44,6 +55,7 @@ function RouteError() {
           ⚠️
         </div>
 
+        {/* Error title */}
         <h1
           className="
             text-3xl
@@ -55,28 +67,31 @@ function RouteError() {
           Something Went Wrong
         </h1>
 
+        {/* HTTP status code if available */}
+        {error?.status && (
+          <p
+            className="
+              mt-4
+              font-semibold
+              text-red-500
+            "
+          >
+            Error {error.status}
+          </p>
+        )}
+
+        {/* Error description */}
         <p
           className="
             mt-4
             text-[var(--text-secondary)]
+            break-words
           "
         >
-          We couldn't load this page.
+          {errorMessage}
         </p>
 
-        {error?.message && (
-          <p
-            className="
-              mt-3
-              text-sm
-              text-[var(--text-secondary)]
-              break-words
-            "
-          >
-            {error.message}
-          </p>
-        )}
-
+        {/* Navigate user back to home */}
         <Link
           to="/"
           className="

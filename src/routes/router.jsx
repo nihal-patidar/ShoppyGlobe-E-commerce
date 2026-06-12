@@ -1,48 +1,82 @@
-import { createBrowserRouter } from "react-router-dom";
-import { RouterProvider } from "react-router-dom";
-import Layout from "../components/Layout";
-import Home from "../pages/Home";
-import Cart from "../pages/Cart";
-import Checkout from "../pages/Checkout";
-import ProductDetail from "../pages/ProductDetail";
-import NotFound from "../pages/NotFound";
-import App from "../App";
-import RouteError from "../pages/RouteError";
+import { lazy, Suspense } from "react";
+import {
+  createBrowserRouter,
+  RouterProvider,
+} from "react-router-dom";
+
+import PageLoader from "../components/PageLoader";
+
+const Layout = lazy(() => import("../components/Layout"));
+const Home = lazy(() => import("../pages/Home"));
+const Cart = lazy(() => import("../pages/Cart"));
+const Checkout = lazy(() => import("../pages/Checkout"));
+const ProductDetail = lazy(() => import("../pages/ProductDetail"));
+const NotFound = lazy(() => import("../pages/NotFound"));
+const RouteError = lazy(() => import("../pages/RouteError"));
+
 function Router() {
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <Layout />,
-      errorElement : <RouteError />,
+
+      element: (
+        <Suspense fallback={<PageLoader />}>
+          <Layout />
+        </Suspense>
+      ),
+
+      errorElement: (
+        <Suspense fallback={<PageLoader />}>
+          <RouteError />
+        </Suspense>
+      ),
+
       children: [
         {
-          path: "",
-          element: <Home />,
+          index: true,
+          element: (
+            <Suspense fallback={<PageLoader />}>
+              <Home />
+            </Suspense>
+          ),
         },
         {
           path: "cart",
-          element: <Cart />,
+          element: (
+            <Suspense fallback={<PageLoader />}>
+              <Cart />
+            </Suspense>
+          ),
         },
         {
           path: "checkout",
-          element: <Checkout />,
+          element: (
+            <Suspense fallback={<PageLoader />}>
+              <Checkout />
+            </Suspense>
+          ),
         },
         {
           path: "product/:id",
-          element: <ProductDetail />,
+          element: (
+            <Suspense fallback={<PageLoader />}>
+              <ProductDetail />
+            </Suspense>
+          ),
         },
         {
           path: "*",
-          element: <NotFound />,
+          element: (
+            <Suspense fallback={<PageLoader />}>
+              <NotFound />
+            </Suspense>
+          ),
         },
       ],
     },
-    {
-        path : '/test',
-        element : <App />
-    }
   ]);
-  return <RouterProvider router={router}></RouterProvider>;
+
+  return <RouterProvider router={router} />;
 }
 
 export default Router;

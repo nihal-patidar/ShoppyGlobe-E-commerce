@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import { clearCart } from "../redux/cartSlice";
 import NoProductsFound from "../components/NoProductFound";
 import OrderProcessing from "../components/OrderProcessing";
+import EmptyCart from "../components/EmptyCart";
 
 function Checkout() {
   const dispatch = useDispatch();
@@ -13,20 +14,19 @@ function Checkout() {
 
   const cartItems = useSelector((store) => store.cart.items);
 
-  if (cartItems.length === 0) {
-    setTimeout(() => {
-      navigate("/");
-    }, 3000);
-    return (
-      <NoProductsFound message="There is no item in Cart. Please items to Cart" />
-    );
-  }
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     phone: "",
     address: "",
   });
+
+  if (cartItems.length === 0) {
+
+    return (
+        <EmptyCart />
+        );
+  }
 
   const subtotal = cartItems.reduce(
     (sum, item) => sum + item.price * item.quantity,
