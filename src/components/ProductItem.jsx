@@ -2,6 +2,8 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { addToCart } from "../redux/cartSlice";
+import { toast } from "react-toastify";
+import { notify } from "../utils/toaster";
 // Remove Suspense since we don't need it for standard image loading
 
 function ProductItem(props) {
@@ -15,6 +17,7 @@ function ProductItem(props) {
 
   function handleAddToCart() {
     dispatch(addToCart({...props.product, quantity : 1}));
+    notify.added();
   }
 
   return (

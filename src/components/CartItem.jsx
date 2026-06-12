@@ -1,5 +1,7 @@
 import { useDispatch } from "react-redux";
 import { increaseQuantity , decreaseQuantity , removeFromCart} from "../redux/cartSlice";
+import { toast } from "react-toastify";
+import { notify } from "../utils/toaster";
 
 function CartItem({product}) {
 
@@ -97,7 +99,7 @@ function CartItem({product}) {
               active:scale-95
             "
 
-            onClick={()=>{ dispatch(decreaseQuantity(product.id))}}
+            onClick={()=>{ dispatch(decreaseQuantity(product.id)) ; notify.decreased()}}
           >
             −
           </button>
@@ -124,7 +126,7 @@ function CartItem({product}) {
               hover:scale-105
               active:scale-95
             "
-            onClick={()=>{dispatch(increaseQuantity(product.id))}}
+            onClick={()=>{dispatch(increaseQuantity(product.id)) ; notify.added()}}
           >
             +
           </button>
@@ -138,7 +140,7 @@ function CartItem({product}) {
             text-red-400
             hover:underline
           "
-          onClick={()=>dispatch(removeFromCart(product.id))}
+          onClick={()=>{dispatch(removeFromCart(product.id)); notify.removed();}}
         >
           Remove Item
         </button>
