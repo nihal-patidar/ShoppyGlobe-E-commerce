@@ -50,10 +50,21 @@ function Checkout() {
     toast.success("🎉 Order placed successfully!");
 
     
-    setTimeout(() => {
-        navigate("/");
-        dispatch(clearCart());
-    }, 5000);
+    function handleSubmit(e) {
+  e.preventDefault();
+
+  setProcessing(true);
+
+  setTimeout(() => {
+    dispatch(clearCart());
+
+    toast.success(
+      "Order placed successfully!"
+    );
+
+    navigate("/");
+  }, 5000);
+}
   }
 
   return (
