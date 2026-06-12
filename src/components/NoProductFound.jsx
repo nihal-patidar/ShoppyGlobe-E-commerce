@@ -47,16 +47,18 @@ function NoProductsFound({
       </h2>
 
       {/* Description */}
-      <p
+      <h2
         className="
           mt-4
-          text-[var(--text-secondary)]
+          text-[var(--text-primary)]
           max-w-md
           mx-auto
+          font-bold
+
         "
       >
         {message}
-      </p>
+      </h2>
 
       {/* Actions */}
       <div

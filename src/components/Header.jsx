@@ -123,6 +123,10 @@ function Header() {
               Home
             </NavLink>
 
+            <NavLink to="/checkout" className={navLinkStyles}>
+              Checkout
+            </NavLink>
+
             <NavLink to="/cart" className={navLinkStyles}>
               <span className="flex items-center gap-2">
                 Cart
