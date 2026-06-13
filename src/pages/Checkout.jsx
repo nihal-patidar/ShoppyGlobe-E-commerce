@@ -2,18 +2,27 @@ import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+
 import { clearCart } from "../redux/cartSlice";
-import NoProductsFound from "../components/NoProductFound";
+
 import OrderProcessing from "../components/OrderProcessing";
 import EmptyCart from "../components/EmptyCart";
+
+import formatPrice from "../utils/priceFormatter";
 
 function Checkout() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  // Controls checkout processing screen
   const [processing, setProcessing] = useState(false);
 
-  const cartItems = useSelector((store) => store.cart.items);
+  // Retrieve cart items from Redux store
+  const cartItems = useSelector(
+    (store) => store.cart.items
+  );
 
+  // Customer information form state
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -21,72 +30,91 @@ function Checkout() {
     address: "",
   });
 
-  if (cartItems.length === 0) {
-
-    return (
-        <EmptyCart />
-        );
+  // Show empty cart page if no products exist
+  if (!cartItems.length) {
+    return <EmptyCart />;
   }
 
+  /**
+   * Calculate subtotal:
+   * Sum of (price × quantity) for all products.
+   */
   const subtotal = cartItems.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0,
+    (sum, item) =>
+      sum + item.price * item.quantity,
+    0
   );
 
-  const shipping = subtotal > 1000 ? 0 : 99;
+  /**
+   * Shipping policy:
+   * Free shipping for orders above ₹1000.
+   */
+  const shipping =
+    subtotal > 1000 ? 0 : 99;
 
+  // Final payable amount
   const total = subtotal + shipping;
 
+  /**
+   * Handles updates for all form fields.
+   */
   function handleChange(e) {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value } = e.target;
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   }
 
+  /**
+   * Simulates order processing.
+   */
   function handleSubmit(e) {
-      e.preventDefault();
+    e.preventDefault();
 
-      setProcessing(true);
+    setProcessing(true);
 
-      setTimeout(() => {
-        dispatch(clearCart());
+    setTimeout(() => {
+      dispatch(clearCart());
 
-        toast.success("Order placed successfully!");
+      toast.success(
+        "Order placed successfully!"
+      );
 
-        navigate("/");
-      }, 7000);
-    }
+      navigate("/");
+    }, 7000);
+  }
+
   return (
     <>
       {processing ? (
         <OrderProcessing />
       ) : (
         <section className="space-y-8">
-          {/* Heading */}
-
+          {/* Page Header */}
           <div>
             <h1
               className="
-            text-4xl
-            md:text-5xl
-            font-bold
-            bg-gradient-to-r
-            from-[var(--primary)]
-            via-[var(--secondary)]
-            to-[var(--accent)]
-            bg-clip-text
-            text-transparent
-          "
+                text-4xl
+                md:text-5xl
+                font-bold
+                bg-gradient-to-r
+                from-[var(--primary)]
+                via-[var(--secondary)]
+                to-[var(--accent)]
+                bg-clip-text
+                text-transparent
+              "
             >
               Checkout
             </h1>
 
             <p
               className="
-            mt-2
-            text-[var(--text-secondary)]
-          "
+                mt-2
+                text-[var(--text-secondary)]
+              "
             >
               Complete your order details.
             </p>
@@ -94,24 +122,24 @@ function Checkout() {
 
           <div
             className="
-          grid
-          gap-8
-          lg:grid-cols-[2fr_1fr]
-        "
+              grid
+              gap-8
+              lg:grid-cols-[2fr_1fr]
+            "
           >
-            {/* Form */}
+            {/* Customer Information Form */}
             <form
               onSubmit={handleSubmit}
               className="
-            card
-            space-y-5
-          "
+                card
+                space-y-5
+              "
             >
               <h2
                 className="
-              text-2xl
-              font-bold
-            "
+                  text-2xl
+                  font-bold
+                "
               >
                 Customer Information
               </h2>
@@ -154,89 +182,104 @@ function Checkout() {
                 onChange={handleChange}
                 required
                 className="
-              input-modern
-              resize-none
-            "
+                  input-modern
+                  resize-none
+                "
               />
 
               <button
                 type="submit"
                 className="
-              btn-primary
-              w-full
-            "
+                  btn-primary
+                  w-full
+                "
               >
                 Place Order
               </button>
             </form>
 
-            {/* Summary */}
+            {/* Order Summary */}
             <aside
               className="
-            card
-            h-fit
-            sticky
-            top-24
-          "
+                card
+                h-fit
+                sticky
+                top-24
+              "
             >
               <h2
                 className="
-              text-2xl
-              font-bold
-              mb-6
-            "
+                  text-2xl
+                  font-bold
+                  mb-6
+                "
               >
                 Order Summary
               </h2>
 
               <div className="space-y-4">
+                {/* Ordered Products */}
                 {cartItems.map((item) => (
                   <div
                     key={item.id}
                     className="
-                  flex
-                  justify-between
-                  text-sm
-                "
+                      flex
+                      justify-between
+                      text-sm
+                    "
                   >
                     <span>
-                      {item.title} × {item.quantity}
+                      {item.title} ×{" "}
+                      {item.quantity}
                     </span>
 
-                    <span>₹{(item.price * item.quantity).toFixed(0)}</span>
+                    <span>
+                      {formatPrice(
+                        item.price *
+                          item.quantity
+                      )}
+                    </span>
                   </div>
                 ))}
 
                 <hr className="border-[var(--border-color)]" />
 
+                {/* Pricing Details */}
                 <div className="flex justify-between">
                   <span>Subtotal</span>
-                  <span>₹{subtotal.toFixed(0)}</span>
+
+                  <span>
+                    {formatPrice(subtotal)}
+                  </span>
                 </div>
 
                 <div className="flex justify-between">
                   <span>Shipping</span>
-                  <span>₹{shipping.toFixed(0)}</span>
+
+                  <span>
+                    {formatPrice(shipping)}
+                  </span>
                 </div>
 
                 <hr className="border-[var(--border-color)]" />
 
+                {/* Grand Total */}
                 <div
                   className="
-                flex
-                justify-between
-                text-xl
-                font-bold
-              "
+                    flex
+                    justify-between
+                    text-xl
+                    font-bold
+                  "
                 >
                   <span>Total</span>
 
                   <span
                     className="
-                  text-[var(--primary)]
-                "
+                      text-[var(--primary)]
+                    "
                   >
-                    ₹{total.toFixed(0)}
+                    {formatPrice(total)}
                   </span>
                 </div>
               </div>

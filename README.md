@@ -1,16 +1,202 @@
-# React + Vite
+# 🛍️ ShoppyGlobe
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern e-commerce web application built with React, Vite, Redux Toolkit, React Router, and Tailwind CSS.
 
-Currently, two official plugins are available:
+ShoppyGlobe allows users to browse products, search items, view detailed product information, manage a shopping cart, and complete a simulated checkout experience with a responsive and modern UI.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## ✨ Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Browse products from API
+- Search products by name or description
+- View detailed product information
+- Product image gallery
+- Add products to cart
+- Increase and decrease quantity
+- Remove items from cart
+- Dynamic order summary
+- Checkout flow with order processing animation
+- Responsive design for mobile, tablet, and desktop
+- Lazy loaded routes for improved performance
+- Error handling and loading states
+- Modern UI using Tailwind CSS
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🔗 Repository
+
+GitHub Repository:
+
+https://github.com/nihal-patidar/ShoppyGlobe-E-commerce
+
+---
+
+## 🚀 Installation & Setup
+
+### Clone Repository
+
+```bash
+git clone https://github.com/nihal-patidar/ShoppyGlobe-E-commerce.git
+```
+
+### Navigate to Project
+
+```bash
+cd ShoppyGlobe-E-commerce
+```
+
+### Install Dependencies
+
+```bash
+npm install
+```
+
+### Start Development Server
+
+```bash
+npm run dev
+```
+
+Application will be available at:
+
+```txt
+http://localhost:5173
+```
+
+### Build for Production
+
+```bash
+npm run build
+```
+
+### Preview Production Build
+
+```bash
+npm run preview
+```
+
+---
+
+## 📁 Project Structure
+
+```txt
+src/
+│
+├── app/
+│   └── store.js
+│
+├── redux/
+│   ├── cartSlice.js
+│   └── searchSlice.js
+│
+├── hooks/
+│   └── useProducts.js
+│
+├── pages/
+│   ├── Home.jsx
+│   ├── Cart.jsx
+│   ├── Checkout.jsx
+│   ├── ProductDetail.jsx
+│   ├── NotFound.jsx
+│   └── RouteError.jsx
+│
+├── components/
+│   ├── Layout.jsx
+│   ├── Header.jsx
+│   ├── SearchBar.jsx
+│   ├── ProductList.jsx
+│   ├── ProductItem.jsx
+│   ├── CartItem.jsx
+│   ├── Loader.jsx
+│   ├── PageLoader.jsx
+│   ├── EmptyCart.jsx
+│   ├── NoProductsFound.jsx
+│   ├── OrderProcessing.jsx
+│   └── ErrorMessage.jsx
+│
+├── routes/
+│   └── Router.jsx
+│
+├── utils/
+│   └── toaster.js
+│
+└── styles/
+```
+
+---
+
+## 🛣️ Application Routes
+
+| Route | Description |
+|---------|-------------|
+| `/` | Home Page |
+| `/product/:id` | Product Details Page |
+| `/cart` | Shopping Cart |
+| `/checkout` | Checkout Page |
+| `*` | Not Found Page |
+
+---
+
+## ⚡ Route Optimization
+
+The application uses:
+
+- React Lazy Loading
+- Suspense
+- Route-Based Code Splitting
+
+Example:
+
+```jsx
+const Home = lazy(() => import("../pages/Home"));
+const Cart = lazy(() => import("../pages/Cart"));
+const Checkout = lazy(() => import("../pages/Checkout"));
+const ProductDetail = lazy(() => import("../pages/ProductDetail"));
+```
+
+This improves initial load performance by loading pages only when required.
+
+---
+
+## 🛒 Redux Store Structure
+
+```js
+{
+  cart: {
+    items: []
+  },
+
+  search: {
+    item: ""
+  }
+}
+```
+
+---
+
+## 🎨 Tech Stack
+
+- React
+- Vite
+- React Router DOM
+- Redux Toolkit
+- React Redux
+- Tailwind CSS
+- React Toastify
+
+---
+
+## 👨‍💻 Author
+
+**Nihal Patidar**
+
+GitHub Profile:
+
+https://github.com/nihal-patidar
+
+Project Repository:
+
+https://github.com/nihal-patidar/ShoppyGlobe-E-commerce
+
+---
