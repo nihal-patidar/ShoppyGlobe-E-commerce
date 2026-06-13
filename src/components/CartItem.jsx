@@ -1,14 +1,46 @@
 import { useDispatch } from "react-redux";
+
 import {
   increaseQuantity,
   decreaseQuantity,
   removeFromCart,
 } from "../redux/cartSlice";
-import { toast } from "react-toastify";
-import { notify } from "../utils/toaster";
 
+import { notify } from "../utils/toaster";
+import formatPrice from "../utils/priceFormatter";
+
+/**
+ * Displays a single cart item with:
+ * - Product information
+ * - Quantity controls
+ * - Remove item functionality
+ */
 function CartItem({ product }) {
   const dispatch = useDispatch();
+
+  /**
+   * Increase product quantity in cart
+   */
+  const handleIncrease = () => {
+    dispatch(increaseQuantity(product.id));
+    notify.added();
+  };
+
+  /**
+   * Decrease product quantity in cart
+   */
+  const handleDecrease = () => {
+    dispatch(decreaseQuantity(product.id));
+    notify.decreased();
+  };
+
+  /**
+   * Remove product completely from cart
+   */
+  const handleRemove = () => {
+    dispatch(removeFromCart(product.id));
+    notify.removed();
+  };
 
   return (
     <div
@@ -22,10 +54,10 @@ function CartItem({ product }) {
         sm:items-center
       "
     >
-      {/* Image */}
+      {/* Product Image */}
       <img
         src={product.thumbnail}
-        alt="Product"
+        alt={product.title}
         loading="lazy"
         className="
           h-28
@@ -36,7 +68,7 @@ function CartItem({ product }) {
         "
       />
 
-      {/* Details */}
+      {/* Product Information */}
       <div className="flex-1">
         <h3
           className="
@@ -66,11 +98,11 @@ function CartItem({ product }) {
             text-[var(--primary)]
           "
         >
-          {product.price}
+          {formatPrice(product.price)}
         </p>
       </div>
 
-      {/* Actions */}
+      {/* Cart Actions */}
       <div
         className="
           flex
@@ -80,7 +112,7 @@ function CartItem({ product }) {
           sm:w-auto
         "
       >
-        {/* Quantity */}
+        {/* Quantity Controls */}
         <div
           className="
             flex
@@ -90,6 +122,9 @@ function CartItem({ product }) {
           "
         >
           <button
+            type="button"
+            aria-label={`Decrease quantity of ${product.title}`}
+            onClick={handleDecrease}
             className="
               h-10
               w-10
@@ -101,10 +136,6 @@ function CartItem({ product }) {
               hover:scale-105
               active:scale-95
             "
-            onClick={() => {
-              dispatch(decreaseQuantity(product.id));
-              notify.decreased();
-            }}
           >
             −
           </button>
@@ -116,10 +147,13 @@ function CartItem({ product }) {
               font-semibold
             "
           >
-            {product?.quantity}
+            {product.quantity}
           </span>
 
           <button
+            type="button"
+            aria-label={`Increase quantity of ${product.title}`}
+            onClick={handleIncrease}
             className="
               h-10
               w-10
@@ -131,35 +165,31 @@ function CartItem({ product }) {
               hover:scale-105
               active:scale-95
             "
-            onClick={() => {
-              dispatch(increaseQuantity(product.id));
-              notify.added();
-            }}
           >
             +
           </button>
         </div>
 
+        {/* Remove Product */}
         <button
-          onClick={() => {
-            dispatch(removeFromCart(product.id));
-            notify.removed();
-          }}
+          type="button"
+          onClick={handleRemove}
+          aria-label={`Remove ${product.title} from cart`}
           className="
-    rounded-xl
-    px-4
-    py-2
-    text-sm
-    font-medium
-    bg-white/5
-    border
-    border-[var(--border-color)]
-    text-[var(--text-secondary)]
-    hover:text-red-400
-    hover:border-red-500/40
-    transition-all
-    duration-300
-  "
+            rounded-xl
+            px-4
+            py-2
+            text-sm
+            font-medium
+            bg-white/5
+            border
+            border-[var(--border-color)]
+            text-[var(--text-secondary)]
+            hover:text-red-400
+            hover:border-red-500/40
+            transition-all
+            duration-300
+          "
         >
           Remove Item
         </button>

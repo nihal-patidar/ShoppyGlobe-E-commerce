@@ -3,30 +3,50 @@ import { Link } from "react-router-dom";
 
 import CartItem from "../components/CartItem";
 import EmptyCart from "../components/EmptyCart";
+import formatPrice from "../utils/priceFormatter";
+
+const SHIPPING_COST = 99;
+
+/**
+ * Formats numbers as Indian Rupee currency.
+ *
+ * Example:
+ * 1000 => ₹1,000
+ */
+
 
 function Cart() {
+  // Get cart items from Redux store
   const cartList = useSelector(
     (store) => store.cart.items
   );
 
-  const subtotal = cartList.reduce(
-    (sum, item) =>
-      sum + item.price * item.quantity,
-    0
-  );
-
-  const shipping =
-    cartList.length > 0 ? 99 : 0;
-
-  const total = subtotal + shipping;
-
+  // Return empty cart screen when no items exist
   if (!cartList.length) {
     return <EmptyCart />;
   }
 
+  /**
+   * Calculate subtotal by summing:
+   * product price × quantity
+   */
+  const subtotal = cartList.reduce(
+    (sum, item) =>
+      sum +
+      (item.price || 0) *
+        (item.quantity || 0),
+    0
+  );
+
+  // Apply shipping only when cart contains items
+  const shipping = SHIPPING_COST;
+
+  // Final payable amount
+  const total = subtotal + shipping;
+
   return (
     <section className="space-y-8">
-      {/* Header */}
+      {/* Page Header */}
       <div>
         <h1
           className="
@@ -54,7 +74,7 @@ function Cart() {
         </p>
       </div>
 
-      {/* Layout */}
+      {/* Main Layout */}
       <div
         className="
           grid
@@ -62,7 +82,7 @@ function Cart() {
           lg:grid-cols-[2fr_1fr]
         "
       >
-        {/* Cart Items */}
+        {/* Cart Items List */}
         <div
           className="
             space-y-5
@@ -81,7 +101,7 @@ function Cart() {
           ))}
         </div>
 
-        {/* Summary */}
+        {/* Order Summary */}
         <aside
           className="
             card
@@ -100,7 +120,7 @@ function Cart() {
             Order Summary
           </h2>
 
-          {/* Items */}
+          {/* Purchased Items */}
           <div className="space-y-3">
             {cartList.map((item) => (
               <div
@@ -122,11 +142,10 @@ function Cart() {
                 </span>
 
                 <span>
-                  ₹
-                  {(
+                  {formatPrice(
                     item.price *
-                    item.quantity
-                  ).toFixed(0)}
+                      item.quantity
+                  )}
                 </span>
               </div>
             ))}
@@ -139,13 +158,13 @@ function Cart() {
             "
           />
 
-          {/* Price Details */}
+          {/* Price Breakdown */}
           <div className="space-y-3">
             <div className="flex justify-between">
               <span>Subtotal</span>
 
               <span>
-                ₹{subtotal.toFixed(0)}
+                {formatPrice(subtotal)}
               </span>
             </div>
 
@@ -153,7 +172,7 @@ function Cart() {
               <span>Shipping</span>
 
               <span>
-                ₹{shipping.toFixed(0)}
+                {formatPrice(shipping)}
               </span>
             </div>
           </div>
@@ -165,7 +184,7 @@ function Cart() {
             "
           />
 
-          {/* Total */}
+          {/* Grand Total */}
           <div
             className="
               flex
@@ -181,13 +200,14 @@ function Cart() {
                 text-[var(--primary)]
               "
             >
-              ₹{total.toFixed(0)}
+              {formatPrice(total)}
             </span>
           </div>
 
-          {/* Checkout */}
+          {/* Checkout Button */}
           <Link
             to="/checkout"
+            aria-label="Proceed to checkout"
             className="
               btn-primary
               w-full

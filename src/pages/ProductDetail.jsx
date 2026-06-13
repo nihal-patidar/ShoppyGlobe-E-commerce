@@ -8,6 +8,7 @@ import Loader from "../components/Loader";
 import ErrorMessage from "../components/ErrorMessage";
 
 import { notify } from "../utils/toaster";
+import formatPrice from "../utils/priceFormatter";
 
 function ProductDetail() {
   const { id } = useParams();
@@ -294,7 +295,7 @@ function ProductDetail() {
                   text-[var(--primary)]
                 "
               >
-                ₹{product.price}
+                {formatPrice( product.price)}
               </span>
 
               <span
