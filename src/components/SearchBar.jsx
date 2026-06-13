@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setSearchItem } from "../redux/searchSlice";
 
 function SearchBar() {
   // Local state for managing search input value
+  const searchQuery = useSelector((store)=> store.search.item);
   const [query, setQuery] = useState("");
 
   // Redux dispatch function for updating global search state
@@ -20,7 +21,7 @@ function SearchBar() {
     const trimmedQuery = query.trim();
 
     // Prevent empty searches
-    if (!trimmedQuery) return;
+    if (trimmedQuery === searchQuery) return;
 
     dispatch(setSearchItem(trimmedQuery));
 

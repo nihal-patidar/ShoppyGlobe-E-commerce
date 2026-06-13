@@ -1,123 +1,112 @@
-import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
-import { addToCart } from "../redux/cartSlice";
-import { toast } from "react-toastify";
-import { notify } from "../utils/toaster";
-// Remove Suspense since we don't need it for standard image loading
-
-function ProductItem(props) {
-  // Extract the image URL safely.
-  // Add a fallback placeholder image just in case the array is empty.
-
+function ProductItem({ product }) {
+  // Redux dispatch used for cart-related actions
   const dispatch = useDispatch();
 
+  // Use the first available product image.
+  // Fallback image prevents broken UI when API data is incomplete.
   const imageUrl =
-    props.product?.images?.[0] || "https://via.placeholder.com/150";
+    product?.images?.[0] || FALLBACK_IMAGE;
 
-  function handleAddToCart() {
-    dispatch(addToCart({...props.product, quantity : 1}));
+  // Add selected product to cart with an initial quantity.
+  // Also trigger a toast notification for user feedback.
+  const handleAddToCart = () => {
+    dispatch(
+      addToCart({
+        ...product,
+        quantity: 1,
+      })
+    );
+
     notify.added();
-  }
+  };
 
   return (
-    <article
-      className="
-      group
-      card
-      overflow-hidden
-      flex
-      flex-col
-      "
-    >
-      <Link to={`product/${props.product.id}`}>
-        {/* Image Container */}
-        <div
-          className="
-          relative
-          overflow-hidden
-          rounded-2xl
-          bg-white/5
-        "
-        >
-          {/* Simply use standard standard img tag with loading="lazy" */}
+    <article className="group card overflow-hidden flex flex-col">
+      <Link to={`/product/${product.id}`}>
+        {/* Product Image Section */}
+        <div className="relative overflow-hidden rounded-2xl bg-white/5">
           <img
             src={imageUrl}
-            alt={props.product?.title || "Product"}
-            loading="lazy" /* Native browser lazy loading */
+            alt={product.title}
+            loading="lazy"
             className="
-            h-56
-            w-full
-            object-cover
-            transition-transform
-            duration-500
-            group-hover:scale-105
-          "
+              h-56
+              w-full
+              object-cover
+              transition-transform
+              duration-500
+              group-hover:scale-105
+            "
           />
 
-          {/* Rating */}
+          {/* Product Rating Badge */}
           <span
             className="
-            absolute
-            top-3
-            right-3
-            px-3
-            py-1
-            rounded-full
-            text-xs
-            font-semibold
-            glass
-          "
+              absolute
+              top-3
+              right-3
+              glass
+              rounded-full
+              px-3
+              py-1
+              text-xs
+              font-semibold
+            "
           >
-            ⭐ {props.product?.rating || "4.8"}
+            ⭐ {product.rating}
           </span>
         </div>
 
-        {/* Content */}
+        {/* Product Information */}
         <div className="flex flex-col flex-1 pt-5">
+          {/* Product Title */}
           <h3
             className="
-            text-lg
-            font-semibold
-            text-[var(--text-primary)]
-            line-clamp-2
-          "
+              text-lg
+              font-semibold
+              text-[var(--text-primary)]
+              line-clamp-2
+            "
           >
-            {props.product?.title || "Premium Product Name"}
+            {product.title}
           </h3>
 
+          {/* Product Description */}
           <p
             className="
-            mt-2
-            text-sm
-            text-[var(--text-secondary)]
-            line-clamp-2
-          "
+              mt-2
+              text-sm
+              text-[var(--text-secondary)]
+              line-clamp-2
+            "
           >
-            {props.product?.description ||
-              "Short product description shown here."}
+            {product.description}
           </p>
         </div>
       </Link>
+
+      {/* Product Footer */}
       <div className="mt-4 flex items-center justify-between">
+        {/* Product Price */}
         <span
           className="
             text-2xl
             font-bold
-              text-[var(--primary)]
-            "
+            text-[var(--primary)]
+          "
         >
-          ₹{props.product.price}
+          ₹{product.price}
         </span>
 
+        {/* Add To Cart Action */}
         <button
+          onClick={handleAddToCart}
           className="
             btn-primary
             text-sm
             px-4
             py-2
-            "
-          onClick={handleAddToCart}
+          "
         >
           Add To Cart
         </button>
@@ -125,5 +114,3 @@ function ProductItem(props) {
     </article>
   );
 }
-
-export default ProductItem;
