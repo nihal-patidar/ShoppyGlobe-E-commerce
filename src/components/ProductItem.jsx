@@ -1,3 +1,7 @@
+import { useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
+import { addToCart } from "../redux/cartSlice";
+import { notify } from "../utils/toaster";
 function ProductItem({ product }) {
   // Redux dispatch used for cart-related actions
   const dispatch = useDispatch();
@@ -114,3 +118,5 @@ function ProductItem({ product }) {
     </article>
   );
 }
+
+export default ProductItem

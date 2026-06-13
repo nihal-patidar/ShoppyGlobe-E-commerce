@@ -1,24 +1,29 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
+
 import { addToCart } from "../redux/cartSlice";
+
 import Loader from "../components/Loader";
 import ErrorMessage from "../components/ErrorMessage";
-import { useDispatch } from "react-redux";
-import { notify } from "../utils/toaster";
 
+import { notify } from "../utils/toaster";
 
 function ProductDetail() {
   const { id } = useParams();
-  const navigate = useNavigate();
 
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const [product, setProduct] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [currentImage , setCurrentImage] = useState()
+
+  // Stores the image currently displayed in the main preview section
+  const [currentImage, setCurrentImage] = useState(null);
 
   useEffect(() => {
+    // Fetch product details whenever route parameter changes
     async function fetchProduct() {
       try {
         setLoading(true);
@@ -34,9 +39,16 @@ function ProductDetail() {
 
         const data = await res.json();
 
-        setProduct({...data, price : (data.price * 85).toFixed(0)});
-        setCurrentImage(data.thumbnail)
-        
+        // Convert USD price into INR for display purposes
+        const formattedProduct = {
+          ...data,
+          price: (data.price * 85).toFixed(0),
+        };
+
+        setProduct(formattedProduct);
+
+        // Display thumbnail as default preview image
+        setCurrentImage(data.thumbnail);
       } catch (err) {
         setError(err);
       } finally {
@@ -47,12 +59,28 @@ function ProductDetail() {
     fetchProduct();
   }, [id]);
 
+  // Add current product to cart with initial quantity
+  const handleAddToCart = () => {
+    if (!product) return;
+
+    dispatch(
+      addToCart({
+        ...product,
+        quantity: 1,
+      })
+    );
+
+    notify.added();
+  };
+
+  // Display loading state while product data is being fetched
   if (loading) {
     return (
       <Loader text="Loading product details..." />
     );
   }
 
+  // Display error UI when API request fails
   if (error) {
     return (
       <ErrorMessage
@@ -64,16 +92,9 @@ function ProductDetail() {
     );
   }
 
-
-  function handleAddToCart() {
-      if(!product) return ;
-      dispatch(addToCart({...product, quantity : 1}));
-      notify.added();
-    }
-
   return (
     <section className="space-y-8">
-      {/* Back Button */}
+      {/* Navigation Back */}
       <button
         onClick={() => navigate(-1)}
         className="
@@ -86,7 +107,7 @@ function ProductDetail() {
         ← Back
       </button>
 
-      {/* Product Section */}
+      {/* Product Overview */}
       <div
         className="
           grid
@@ -94,8 +115,9 @@ function ProductDetail() {
           lg:grid-cols-2
         "
       >
-        {/* Left Side */}
+        {/* Product Images */}
         <div className="space-y-4">
+          {/* Main Preview */}
           <div
             className="
               card
@@ -120,7 +142,7 @@ function ProductDetail() {
             />
           </div>
 
-          {/* Gallery */}
+          {/* Thumbnail Gallery */}
           {product.images?.length > 0 && (
             <div
               className="
@@ -137,22 +159,38 @@ function ProductDetail() {
                     src={image}
                     alt={product.title}
                     loading="lazy"
-                    className="
+                    onClick={() =>
+                      setCurrentImage(image)
+                    }
+                    className={`
                       h-20
                       w-full
                       object-cover
                       rounded-xl
+                      cursor-pointer
                       border
-                      border-[var(--border-color)]
-                    "
-                    onClick={()=>{setCurrentImage(image)}}
+                      transition-all
+                      duration-300
+
+                      ${
+                        currentImage === image
+                          ? `
+                            border-[var(--primary)]
+                            ring-2
+                            ring-[var(--primary)]
+                          `
+                          : `
+                            border-[var(--border-color)]
+                          `
+                      }
+                    `}
                   />
                 ))}
             </div>
           )}
         </div>
 
-        {/* Right Side */}
+        {/* Product Information */}
         <div
           className="
             card
@@ -162,7 +200,7 @@ function ProductDetail() {
           "
         >
           <div className="space-y-5">
-            {/* Category + Discount */}
+            {/* Category & Discount */}
             <div className="flex flex-wrap gap-2">
               <span
                 className="
@@ -191,7 +229,7 @@ function ProductDetail() {
               </span>
             </div>
 
-            {/* Title */}
+            {/* Product Title */}
             <h1
               className="
                 text-3xl
@@ -204,18 +242,14 @@ function ProductDetail() {
             </h1>
 
             {/* Brand */}
-            <p
-              className="
-                text-[var(--text-secondary)]
-              "
-            >
+            <p className="text-[var(--text-secondary)]">
               Brand:
-              <span className="font-medium ml-2">
+              <span className="ml-2 font-medium">
                 {product.brand}
               </span>
             </p>
 
-            {/* Rating */}
+            {/* Rating & Stock */}
             <div
               className="
                 flex
@@ -245,7 +279,7 @@ function ProductDetail() {
               </span>
             </div>
 
-            {/* Price */}
+            {/* Pricing */}
             <div
               className="
                 flex
@@ -273,7 +307,7 @@ function ProductDetail() {
               </span>
             </div>
 
-            {/* Description */}
+            {/* Product Description */}
             <p
               className="
                 text-[var(--text-secondary)]
@@ -283,7 +317,7 @@ function ProductDetail() {
               {product.description}
             </p>
 
-            {/* Features */}
+            {/* Selling Points */}
             <div className="space-y-2">
               <div className="flex gap-2">
                 ✅ Premium Quality
@@ -298,7 +332,7 @@ function ProductDetail() {
               </div>
             </div>
 
-            {/* Action Buttons */}
+            {/* Purchase Actions */}
             <div
               className="
                 flex
@@ -309,12 +343,11 @@ function ProductDetail() {
               "
             >
               <button
+                onClick={handleAddToCart}
                 className="
                   btn-primary
                   flex-1
                 "
-
-                onClick={handleAddToCart}
               >
                 Add To Cart
               </button>
@@ -332,7 +365,7 @@ function ProductDetail() {
         </div>
       </div>
 
-      {/* Description Section */}
+      {/* Detailed Description */}
       <div className="card">
         <h2
           className="
